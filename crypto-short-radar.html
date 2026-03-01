@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHORT RADAR — Binance Futures</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #080d1a;
+    --bg3: #0d1425;
+    --border: #1a2540;
+    --accent: #00f5c4;
+    --accent2: #ff3e6c;
+    --accent3: #f5a623;
+    --text: #c8d8f0;
+    --text-dim: #4a6080;
+    --green: #00e676;
+    --red: #ff3e6c;
+    --yellow: #f5a623;
+    --glow: 0 0 20px rgba(0,245,196,0.3);
+    --glow-red: 0 0 20px rgba(255,62,108,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,196,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,196,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scan line effect */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scanline 4s linear infinite;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  @keyframes scanline {
+    0% { top: 0; }
+    100% { top: 100vh; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 25px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    border: 2px solid var(--accent2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--accent2);
+    box-shadow: var(--glow-red);
+    animation: pulse-red 2s ease-in-out infinite;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 10px rgba(255,62,108,0.3); }
+    50% { box-shadow: 0 0 25px rgba(255,62,108,0.7); }
+  }
+
+  .logo-text h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .logo-text h1 span { color: var(--accent2); }
+
+  .logo-text p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    transition: all 0.3s;
+  }
+
+  .status-dot.live {
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .last-update {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* SETTINGS BAR */
+  .settings-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .setting-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 4px;
+  }
+
+  .setting-group label {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .setting-group input[type="number"],
+  .setting-group select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    padding: 4px 8px;
+    width: 70px;
+    outline: none;
+    border-radius: 2px;
+  }
+
+  .setting-group select { width: 100px; }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    box-shadow: var(--glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+  }
+
+  .btn-danger:hover {
+    background: var(--accent2);
+    color: white;
+    box-shadow: var(--glow-red);
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .stat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .stat-card.cyan::before { background: var(--accent); }
+  .stat-card.red::before { background: var(--accent2); }
+  .stat-card.yellow::before { background: var(--accent3); }
+  .stat-card.green::before { background: var(--green); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .stat-card.red .stat-value { color: var(--accent2); }
+  .stat-card.yellow .stat-value { color: var(--accent3); }
+  .stat-card.green .stat-value { color: var(--green); }
+
+  /* MAIN TABLE */
+  .table-container {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 5px;
+  }
+
+  .filter-tab {
+    padding: 5px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    transition: all 0.2s;
+  }
+
+  .filter-tab.active {
+    background: var(--accent2);
+    color: white;
+    border-color: var(--accent2);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  thead th.right { text-align: right; }
+  thead th.center { text-align: center; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(26,37,64,0.5);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover {
+    background: rgba(0,245,196,0.03);
+  }
+
+  tbody tr.alert-row {
+    background: rgba(255,62,108,0.05);
+    border-left: 2px solid var(--accent2);
+    animation: rowPulse 2s ease-in-out infinite;
+  }
+
+  tbody tr.watch-row {
+    background: rgba(245,166,35,0.04);
+    border-left: 2px solid var(--accent3);
+  }
+
+  @keyframes rowPulse {
+    0%, 100% { background: rgba(255,62,108,0.05); }
+    50% { background: rgba(255,62,108,0.1); }
+  }
+
+  td {
+    padding: 13px 16px;
+    font-size: 14px;
+  }
+
+  .coin-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .coin-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  .coin-usdt {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .price-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+  }
+
+  .change-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .change-val.up { color: var(--green); }
+  .change-val.down { color: var(--red); }
+
+  /* Green candles visual */
+  .candles-visual {
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    justify-content: center;
+    height: 24px;
+  }
+
+  .candle {
+    width: 6px;
+    border-radius: 1px;
+    min-height: 4px;
+    transition: all 0.5s;
+  }
+
+  .candle.green { background: var(--green); }
+  .candle.red { background: var(--red); }
+
+  /* RSI bar */
+  .rsi-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rsi-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 60px;
+  }
+
+  .rsi-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+
+  .rsi-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* Signal badge */
+  .signal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .signal-badge.strong-short {
+    background: rgba(255,62,108,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(255,62,108,0.3);
+  }
+
+  .signal-badge.watch {
+    background: rgba(245,166,35,0.1);
+    color: var(--accent3);
+    border: 1px solid rgba(245,166,35,0.2);
+  }
+
+  .signal-badge.normal {
+    background: rgba(74,96,128,0.2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+
+  .signal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .strong-short .signal-dot { animation: blink 0.7s ease-in-out infinite; }
+
+  /* Score meter */
+  .score-meter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .score-pips {
+    display: flex;
+    gap: 3px;
+  }
+
+  .pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 1px;
+    background: var(--border);
+    transition: all 0.3s;
+  }
+
+  .pip.filled.level-1 { background: var(--accent3); }
+  .pip.filled.level-2 { background: var(--accent3); }
+  .pip.filled.level-3 { background: var(--accent2); }
+  .pip.filled.level-4 { background: var(--accent2); box-shadow: 0 0 5px var(--accent2); }
+  .pip.filled.level-5 { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+
+  /* Loading state */
+  .loading-row td {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Alert notification */
+  .alert-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg3);
+    border: 1px solid var(--accent2);
+    border-left: 4px solid var(--accent2);
+    padding: 14px 20px;
+    border-radius: 4px;
+    box-shadow: var(--glow-red), 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+    max-width: 280px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .alert-toast.show { display: block; }
+
+  .alert-toast-title {
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .alert-toast-coin {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .alert-toast-detail {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Error bar */
+  .error-bar {
+    background: rgba(255,62,108,0.1);
+    border: 1px solid rgba(255,62,108,0.3);
+    color: var(--accent2);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 15px;
+    display: none;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .error-bar.show { display: block; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .settings-bar { gap: 10px; }
+  }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    th.hide-sm, td.hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">▼</div>
+      <div class="logo-text">
+        <h1>SHORT <span>RADAR</span></h1>
+        <p>BINANCE FUTURES — REAL-TIME SIGNAL SCANNER</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-indicator">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">BAĞLANIYOR...</span>
+      </div>
+      <div class="last-update" id="lastUpdate">—</div>
+    </div>
+  </header>
+
+  <!-- ERROR BAR -->
+  <div class="error-bar" id="errorBar"></div>
+
+  <!-- SETTINGS -->
+  <div class="settings-bar">
+    <div class="setting-group">
+      <label>Zaman Dilimi</label>
+      <select id="intervalSelect">
+        <option value="1m">1 dk</option>
+        <option value="3m">3 dk</option>
+        <option value="5m">5 dk</option>
+        <option value="15m" selected>15 dk</option>
+        <option value="1h">1 saat</option>
+        <option value="4h">4 saat</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>Min Yeşil Mum</label>
+      <input type="number" id="minGreenCandles" value="5" min="2" max="15">
+    </div>
+    <div class="setting-group">
+      <label>Min Yükseliş %</label>
+      <input type="number" id="minChangePercent" value="3" min="1" max="20" step="0.5">
+    </div>
+    <div class="setting-group">
+      <label>RSI Eşiği</label>
+      <input type="number" id="rsiThreshold" value="70" min="60" max="90">
+    </div>
+    <div class="setting-group">
+      <label>Min Hacim (M$)</label>
+      <input type="number" id="minVolume" value="10" min="1" max="500" step="1">
+    </div>
+    <button class="btn btn-primary" onclick="startScanner()">▶ TARA</button>
+    <button class="btn btn-danger" onclick="stopScanner()">■ DURDUR</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card cyan">
+      <div class="stat-label">Taranan Coin</div>
+      <div class="stat-value" id="statScanned">0</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Short Sinyali</div>
+      <div class="stat-value" id="statSignals">0</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="stat-label">İzleme Listesi</div>
+      <div class="stat-value" id="statWatch">0</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Son Tarama</div>
+      <div class="stat-value" style="font-size:18px;padding-top:5px" id="statTime">—</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+    <div class="table-header">
+      <div class="table-title">⚡ SHORT ADAYLARI</div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('all', this)">TÜMÜ</button>
+        <button class="filter-tab" onclick="setFilter('strong', this)">GÜÇLÜ SHORT</button>
+        <button class="filter-tab" onclick="setFilter('watch', this)">İZLE</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th class="right">Fiyat</th>
+            <th class="right">Değişim %</th>
+            <th class="center hide-sm">Mumlar</th>
+            <th class="center">RSI</th>
+            <th class="center hide-sm">Oynaklık</th>
+            <th class="center hide-sm">Skor</th>
+            <th class="center">Sinyal</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="loading-row">
+            <td colspan="7">
+              <span>TARAMA BAŞLATMAK İÇİN ▶ TARA BUTONUNA BASIN</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- SİNYAL GEÇMİŞİ -->
+<div style="margin-top:20px;position:relative;z-index:1;max-width:1400px;margin-left:auto;margin-right:auto;padding:0 20px 30px">
+  <div class="table-container">
+    <div class="table-header">
+      <div class="table-title" style="color:var(--accent3)">🕐 SİNYAL GEÇMİŞİ</div>
+      <span style="font-size:11px;color:var(--text-dim);font-family:Share Tech Mono,monospace">Son 20 sinyal</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Saat</th>
+            <th>Coin</th>
+            <th class="center">Alım Gücü</th>
+            <th class="center">Değişim</th>
+            <th class="center">Skor</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:20px;font-family:Share Tech Mono,monospace;font-size:12px">Henüz sinyal yok</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT TOAST -->
+<div class="alert-toast" id="alertToast">
+  <div class="alert-toast-title">⚠ SHORT SİNYALİ</div>
+  <div class="alert-toast-coin" id="toastCoin">—</div>
+  <div class="alert-toast-detail" id="toastDetail">—</div>
+</div>
+
+<script>
+const BINANCE_REST = 'http://localhost:8888/api';
+const SCAN_INTERVAL_MS = 60000;
+const MAX_COINS = 200;
+const MIN_ONBOARD_DAYS = 180;
+
+let scanTimer = null;
+let isScanning = false;
+let currentFilter = 'all';
+let allResults = [];
+let alertedCoins = new Set();
+let signalHistory = []; // Sinyal geçmişi
+
+// Ses uyarısı
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playAlert() {
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.4);
+  } catch(e) {}
+}
+
+// ─── BİNANCE API ───
+
+async function fetchTopCoins() {
+  const sixMonthsAgo = Date.now() - (180 * 24 * 60 * 60 * 1000);
+  const [infoRes, tickerRes] = await Promise.all([
+    fetch(`${BINANCE_REST}/exchangeinfo`),
+    fetch(`${BINANCE_REST}/ticker`)
+  ]);
+  const info = await infoRes.json();
+  const ticker = await tickerRes.json();
+  const validSymbols = new Set(
+    (info.symbols || [])
+      .filter(s =>
+        s.symbol.endsWith('USDT') &&
+        !s.symbol.includes('_') &&
+        s.status === 'TRADING' &&
+        s.contractType === 'PERPETUAL' &&
+        s.onboardDate <= sixMonthsAgo
+      )
+      .map(s => s.symbol)
+  );
+  return ticker
+    .filter(t => validSymbols.has(t.symbol))
+    .sort((a, b) => parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume))
+    .slice(0, 200)
+    .map(t => ({
+      symbol: t.symbol,
+      price: parseFloat(t.lastPrice),
+      change24h: parseFloat(t.priceChangePercent),
+      volume24h: parseFloat(t.quoteVolume)
+    }));
+}
+
+async function fetchKlines(symbol, interval, limit = 50) {
+  const res = await fetch(`${BINANCE_REST}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+  const data = await res.json();
+  return data.map(k => ({
+    open: parseFloat(k[1]),
+    high: parseFloat(k[2]),
+    low: parseFloat(k[3]),
+    close: parseFloat(k[4]),
+    volume: parseFloat(k[5])
+  }));
+}
+
+// ─── GÖSTERGELER ───
+
+function calcRSI(candles, period = 14) {
+  if (candles.length < period + 1) return 50;
+  let gains = 0, losses = 0;
+  for (let i = candles.length - period; i < candles.length; i++) {
+    const diff = candles[i].close - candles[i-1].close;
+    if (diff > 0) gains += diff;
+    else losses += Math.abs(diff);
+  }
+  const avgGain = gains / period;
+  const avgLoss = losses / period;
+  if (avgLoss === 0) return 100;
+  return 100 - (100 / (1 + avgGain / avgLoss));
+}
+
+function countGreenCandles(candles) {
+  let count = 0;
+  for (let i = candles.length - 2; i >= 0; i--) {
+    if (candles[i].close > candles[i].open) count++;
+    else break;
+  }
+  return count;
+}
+
+function calcChange(candles, lookback = 5) {
+  if (candles.length < lookback) return 0;
+  const start = candles[candles.length - lookback].open;
+  const end = candles[candles.length - 1].close;
+  return ((end - start) / start) * 100;
+}
+
+function calcMomentum(candles, lookback = 5) {
+  // Mum başına ortalama % değişim = hız göstergesi
+  if (candles.length < lookback) return 0;
+  const totalChange = calcChange(candles, lookback);
+  return totalChange / lookback;
+}
+
+function calcBollinger(candles, period = 20) {
+  if (candles.length < period) return { upper: 0, lower: 0, mid: 0 };
+  const closes = candles.slice(-period).map(c => c.close);
+  const mid = closes.reduce((a,b) => a+b, 0) / period;
+  const std = Math.sqrt(closes.reduce((a,b) => a + Math.pow(b-mid,2), 0) / period);
+  return { upper: mid + 2*std, lower: mid - 2*std, mid };
+}
+
+function calcVolumeSpike(candles, period = 10) {
+  // Son mumun hacmi, önceki ortalamanın kaç katı?
+  if (candles.length < period + 1) return 1;
+  const avgVol = candles.slice(-period-1, -1).reduce((a,b) => a + b.volume, 0) / period;
+  const lastVol = candles[candles.length - 1].volume;
+  return avgVol > 0 ? lastVol / avgVol : 1;
+}
+
+function calcUpperWick(candles) {
+  // Son mumun üst fitil oranı (gövdeye göre)
+  const last = candles[candles.length - 1];
+  const body = Math.abs(last.close - last.open);
+  const upperWick = last.high - Math.max(last.close, last.open);
+  if (body === 0) return 0;
+  return upperWick / body;
+}
+
+function calcATR(candles, period = 10) {
+  if (candles.length < period + 1) return 0;
+  const trs = candles.slice(-period).map((c, i, arr) => {
+    if (i === 0) return c.high - c.low;
+    const prev = arr[i-1];
+    return Math.max(c.high - c.low, Math.abs(c.high - prev.close), Math.abs(c.low - prev.close));
+  });
+  const atr = trs.reduce((a,b) => a+b, 0) / period;
+  // ATR'yi fiyata göre yüzde olarak ver
+  const lastClose = candles[candles.length-1].close;
+  return lastClose > 0 ? (atr / lastClose) * 100 : 0;
+}
+
+// ─── PUANLAMA ───
+
+function scoreSignal({ rsi, greenCandles, change, aboveBB, volumeSpike, upperWick, atr, minGreen, minChange, rsiThreshold }) {
+  let score = 0;
+
+  if (rsi >= 80) score += 2;
+  else if (rsi >= rsiThreshold) score += 1;
+
+  if (greenCandles >= minGreen + 3) score += 2;
+  else if (greenCandles >= minGreen) score += 1;
+
+  if (change >= minChange * 2) score += 2;
+  else if (change >= minChange) score += 1;
+
+  if (aboveBB) score += 1;
+  if (volumeSpike >= 2.5) score += 1; // Hacim en az 2.5x şişmiş
+  if (upperWick >= 1.5) score += 1;   // Üst fitil gövdeden 1.5x uzun
+
+  return Math.min(score, 5);
+}
+
+// Sinyalin Türkçe açıklaması
+function buildReasons(r, rsiThreshold) {
+  const reasons = [];
+  if (r.rsi >= 80) reasons.push('🔴 Aşırı alım bölgesinde');
+  else if (r.rsi >= rsiThreshold) reasons.push('🟠 Alım bölgesine yakın');
+  if (r.greenCandles >= 5) reasons.push(`🟢 ${r.greenCandles} mum üst üste yükseliyor`);
+  else if (r.greenCandles >= 2) reasons.push(`🟡 ${r.greenCandles} yeşil mum`);
+  if (r.volumeSpike >= 2.5) reasons.push(`📊 Hacim ${r.volumeSpike.toFixed(1)}x şişmiş`);
+  if (r.upperWick >= 1.5) reasons.push('⬆️ Tepede satış baskısı var');
+  if (r.aboveBB) reasons.push('📈 Bant dışına çıktı');
+  if (r.momentum >= 0.5) reasons.push(`⚡ Hız: mum başına +${r.momentum.toFixed(2)}%`);
+  if (r.atr >= 2) reasons.push(`🌊 Yüksek oynaklık (ATR: %${r.atr.toFixed(1)})`);
+  return reasons;
+}
+
+function getSignalLabel(score) {
+  if (score >= 4) return { label: 'GÜÇLÜ SHORT', cls: 'strong-short' };
+  if (score >= 2) return { label: 'İZLE', cls: 'watch' };
+  return { label: 'NORMAL', cls: 'normal' };
+}
+
+// ─── TEK COİN TARA ───
+
+async function scanCoin(coin, interval, minGreen, minChange, rsiThresh) {
+  try {
+    const candles = await fetchKlines(coin.symbol, interval, 50);
+    const rsi = calcRSI(candles);
+    const greenCandles = countGreenCandles(candles);
+    const change = calcChange(candles, 5);
+    const momentum = calcMomentum(candles, 5);
+    const bb = calcBollinger(candles);
+    const lastClose = candles[candles.length - 1].close;
+    const aboveBB = lastClose > bb.upper;
+    const volumeSpike = calcVolumeSpike(candles, 10);
+    const upperWick = calcUpperWick(candles);
+    const atr = calcATR(candles, 10);
+
+    const score = scoreSignal({ rsi, greenCandles, change, aboveBB, volumeSpike, upperWick, atr, minGreen, minChange, rsiThreshold: rsiThresh });
+    const signal = getSignalLabel(score);
+    const reasons = buildReasons({ rsi, greenCandles, change, volumeSpike, upperWick, aboveBB, momentum }, rsiThresh);
+
+    return {
+      symbol: coin.symbol.replace('USDT', ''),
+      fullSymbol: coin.symbol,
+      price: coin.price,
+      change24h: coin.change24h,
+      rsi: Math.round(rsi),
+      greenCandles,
+      change,
+      momentum,
+      aboveBB,
+      volumeSpike,
+      upperWick,
+      score,
+      signal,
+      reasons,
+      atr,
+      candleHistory: candles.slice(-10).map(c => c.close > c.open ? 'green' : 'red')
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+// ─── ANA TARAMA ───
+
+async function runScan() {
+  if (!isScanning) return;
+
+  const interval = document.getElementById('intervalSelect').value;
+  const minGreen = parseInt(document.getElementById('minGreenCandles').value) || 5;
+  const minChange = parseFloat(document.getElementById('minChangePercent').value) || 3;
+  const rsiThresh = parseInt(document.getElementById('rsiThreshold').value) || 70;
+  const minVolume = (parseFloat(document.getElementById('minVolume').value) || 10) * 1_000_000;
+
+  setStatus('scanning');
+  showLoading();
+
+  try {
+    const coins = await fetchTopCoins();
+    document.getElementById('statScanned').textContent = coins.length;
+
+    const results = [];
+    for (let i = 0; i < coins.length; i += 8) {
+      const batch = coins.slice(i, i + 8);
+      const batchResults = await Promise.all(
+        batch.map(c => scanCoin(c, interval, minGreen, minChange, rsiThresh))
+      );
+      results.push(...batchResults.filter(Boolean));
+      if (!isScanning) break;
+    }
+
+    // Hacim filtresi uygula
+    const filteredResults = results.filter(r => {
+      const coin = coins.find(c => c.symbol === r.fullSymbol);
+      return coin ? coin.volume24h >= minVolume : true;
+    });
+    filteredResults.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return b.atr - a.atr; // Aynı skorsa oynaklığa göre sırala
+    });
+    const results2 = filteredResults;
+    allResults = results2;
+
+    const signals = results2.filter(r => r.score >= 4).length;
+    const watches = results2.filter(r => r.score >= 2 && r.score < 4).length;
+    document.getElementById('statSignals').textContent = signals;
+    document.getElementById('statWatch').textContent = watches;
+    document.getElementById('statTime').textContent = new Date().toLocaleTimeString('tr-TR');
+
+    renderTable();
+    setStatus('live');
+
+    // Yeni sinyal varsa ses çal ve geçmişe ekle
+    results2.filter(r => r.score >= 4).forEach(r => {
+      if (!alertedCoins.has(r.symbol)) {
+        alertedCoins.add(r.symbol);
+        showAlert(r);
+        playAlert();
+        addToHistory(r);
+      }
+    });
+    results2.filter(r => r.score < 4).forEach(r => alertedCoins.delete(r.symbol));
+
+  } catch (err) {
+    showError('API Hatası: ' + err.message + ' — CORS sorunuysa tarayıcı eklentisi gerekebilir.');
+    setStatus('error');
+  }
+
+  if (isScanning) {
+    scanTimer = setTimeout(runScan, SCAN_INTERVAL_MS);
+    document.getElementById('lastUpdate').textContent = 'Sonraki: 60sn';
+    startCountdown(60);
+  }
+}
+
+function startCountdown(secs) {
+  let s = secs;
+  const el = document.getElementById('lastUpdate');
+  const timer = setInterval(() => {
+    s--;
+    if (s <= 0 || !isScanning) { clearInterval(timer); return; }
+    el.textContent = `Sonraki: ${s}sn`;
+  }, 1000);
+}
+
+// ─── SİNYAL GEÇMİŞİ ───
+
+function addToHistory(r) {
+  signalHistory.unshift({
+    time: new Date().toLocaleTimeString('tr-TR'),
+    symbol: r.symbol,
+    score: r.score,
+    rsi: r.rsi,
+    change: r.change
+  });
+  if (signalHistory.length > 20) signalHistory.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('historyBody');
+  if (!el) return;
+  if (signalHistory.length === 0) {
+    el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:20px;font-family:Share Tech Mono,monospace;font-size:12px">Henüz sinyal yok</td></tr>';
+    return;
+  }
+  el.innerHTML = signalHistory.map(h => `
+    <tr>
+      <td style="font-family:Share Tech Mono,monospace;font-size:11px;color:var(--text-dim)">${h.time}</td>
+      <td><span class="coin-badge">${h.symbol}</span></td>
+      <td style="font-family:Share Tech Mono,monospace;font-size:12px;color:var(--accent2)">${h.rsi}</td>
+      <td style="font-family:Share Tech Mono,monospace;font-size:12px;color:var(--green)">+${h.change.toFixed(1)}%</td>
+      <td>${'█'.repeat(h.score)}${'░'.repeat(5-h.score)}</td>
+    </tr>`).join('');
+}
+
+// ─── TABLO RENDER ───
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  let data = allResults;
+
+  if (currentFilter === 'strong') data = data.filter(r => r.score >= 4);
+  else if (currentFilter === 'watch') data = data.filter(r => r.score >= 2 && r.score < 4);
+
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr class="loading-row"><td colspan="7">Sinyal bulunamadı — kriterleri gevşetmeyi dene</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(r => {
+    const rowCls = r.score >= 4 ? 'alert-row' : r.score >= 2 ? 'watch-row' : '';
+    const changeCls = r.change24h >= 0 ? 'up' : 'down';
+    const changeSign = r.change24h >= 0 ? '+' : '';
+
+    const candlesHtml = r.candleHistory.slice(-8).map(c => {
+      const h = 6 + Math.floor(Math.random() * 14);
+      return `<div class="candle ${c}" style="height:${h}px"></div>`;
+    }).join('');
+
+    let rsiColor = '#00e676';
+    if (r.rsi >= 80) rsiColor = '#ff3e6c';
+    else if (r.rsi >= 70) rsiColor = '#f5a623';
+
+    const pipsHtml = [1,2,3,4,5].map(i => {
+      const filled = i <= r.score ? `filled level-${i}` : '';
+      return `<div class="pip ${filled}"></div>`;
+    }).join('');
+
+    // Türkçe etiketler
+    const tags = [];
+    if (r.volumeSpike >= 2.5) tags.push(`<span style="font-size:9px;background:rgba(0,245,196,0.1);color:var(--accent);padding:2px 5px;border-radius:2px;border:1px solid rgba(0,245,196,0.2)">HACİM ŞİŞMİŞ</span>`);
+    if (r.upperWick >= 1.5) tags.push(`<span style="font-size:9px;background:rgba(255,62,108,0.1);color:var(--accent2);padding:2px 5px;border-radius:2px;border:1px solid rgba(255,62,108,0.2)">SATIŞ BASKISI</span>`);
+    if (r.aboveBB) tags.push(`<span style="font-size:9px;background:rgba(245,166,35,0.1);color:var(--accent3);padding:2px 5px;border-radius:2px;border:1px solid rgba(245,166,35,0.2)">BANT DIŞI</span>`);
+
+    const momentumSign = r.momentum >= 0 ? '+' : '';
+
+    return `<tr class="${rowCls}" onclick="window.open('https://www.binance.com/tr/futures/${r.fullSymbol}', '_blank')" style="cursor:pointer" title="Binance'de aç">
+      <td>
+        <div class="coin-name">
+          <span class="coin-badge">${r.symbol}</span>
+          <span class="coin-usdt">USDT</span>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${tags.join('')}</div>
+      </td>
+      <td class="price-val right">$${formatPrice(r.price)}</td>
+      <td class="right">
+        <div class="change-val ${changeCls}">${changeSign}${r.change24h.toFixed(2)}%</div>
+        <div style="font-size:10px;color:var(--accent);text-align:right;margin-top:2px">⚡ ${momentumSign}${r.momentum.toFixed(2)}%/mum</div>
+      </td>
+      <td class="center hide-sm">
+        <div class="candles-visual">${candlesHtml}</div>
+        <div style="font-size:10px;color:var(--accent);text-align:center;margin-top:3px">${r.greenCandles} yeşil</div>
+      </td>
+      <td>
+        <div class="rsi-bar-wrap">
+          <div class="rsi-bar">
+            <div class="rsi-fill" style="width:${r.rsi}%;background:${rsiColor}"></div>
+          </div>
+          <span class="rsi-num" style="color:${rsiColor}">${r.rsi}</span>
+        </div>
+      </td>
+      <td class="center hide-sm">
+        <div style="font-family:Share Tech Mono,monospace;font-size:13px;color:${r.atr >= 3 ? '#ff3e6c' : r.atr >= 1.5 ? '#f5a623' : '#4a6080'}">
+          %${r.atr.toFixed(2)}
+        </div>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:2px">${r.atr >= 3 ? 'ÇOK YÜKSEK' : r.atr >= 1.5 ? 'YÜKSEK' : 'NORMAL'}</div>
+      </td>
+      <td class="center hide-sm">
+        <div class="score-meter">
+          <div class="score-pips">${pipsHtml}</div>
+        </div>
+      </td>
+      <td class="center">
+        <span class="signal-badge ${r.signal.cls}">
+          <span class="signal-dot"></span>
+          ${r.signal.label}
+        </span>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function formatPrice(p) {
+  if (p >= 1000) return p.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  if (p >= 1) return p.toFixed(4);
+  return p.toFixed(6);
+}
+
+function showLoading() {
+  document.getElementById('tableBody').innerHTML = `
+    <tr class="loading-row">
+      <td colspan="7">
+        <span class="loading-spinner"></span>
+        TARANYOR...
+      </td>
+    </tr>`;
+}
+
+function setStatus(state) {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  if (state === 'live') {
+    dot.className = 'status-dot live';
+    text.textContent = 'CANLI';
+    text.style.color = '#00e676';
+  } else if (state === 'scanning') {
+    dot.className = 'status-dot';
+    dot.style.background = '#f5a623';
+    text.textContent = 'TARANIYOR';
+    text.style.color = '#f5a623';
+  } else if (state === 'stopped') {
+    dot.className = 'status-dot';
+    text.textContent = 'DURDURULDU';
+    text.style.color = '';
+  } else if (state === 'error') {
+    dot.className = 'status-dot';
+    dot.style.background = '#ff3e6c';
+    text.textContent = 'HATA';
+    text.style.color = '#ff3e6c';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBar');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 8000);
+}
+
+function showAlert(coin) {
+  const toast = document.getElementById('alertToast');
+  document.getElementById('toastCoin').textContent = coin.symbol + '/USDT';
+  document.getElementById('toastDetail').textContent = coin.reasons.slice(0, 2).join(' • ');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 6000);
+}
+
+function startScanner() {
+  if (isScanning) return;
+  isScanning = true;
+  alertedCoins.clear();
+  document.getElementById('errorBar').classList.remove('show');
+  runScan();
+}
+
+function stopScanner() {
+  isScanning = false;
+  if (scanTimer) clearTimeout(scanTimer);
+  setStatus('stopped');
+  document.getElementById('lastUpdate').textContent = '—';
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  if (allResults.length > 0) renderTable();
+}
+
+// İlk yüklemede geçmiş tablosunu göster
+renderHistory();
+</script>
+</body>
+</html>
