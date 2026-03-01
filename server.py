@@ -1,17 +1,13 @@
 """
 SHORT RADAR — Binance Proxy Server
-Kullanım:
-  pip install flask flask-cors requests
-  python server.py
-Sonra tarayıcıda crypto-short-radar.html dosyasını aç.
 """
-
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app)  # Tüm origins'e izin ver
+CORS(app)
 
 BINANCE = "https://fapi.binance.com"
 
@@ -38,6 +34,6 @@ def exchangeinfo():
     return jsonify(r.json())
 
 if __name__ == "__main__":
-    print("✅ SHORT RADAR proxy başlatıldı → http://localhost:5000")
-    print("   Şimdi crypto-short-radar.html dosyasını tarayıcıda aç")
-    app.run(port=8888, debug=False)
+    port = int(os.environ.get('PORT', 8888))
+    print(f"✅ SHORT RADAR proxy başlatıldı → http://localhost:{port}")
+    app.run(host='0.0.0.0', port=port, debug=False)
